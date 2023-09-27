@@ -18,6 +18,7 @@ export default function App() {
       <Router>
       <Routes>
           <Route path="/gameRoom" element={<GameRoom />} />
+          <Route path="gameRoom/:gameCode" element={<GameRoom />} />
           <Route path="/join-game" element={<JoinGame />} />
           <Route path="/help" element={<HelpPage />} />
           <Route path='/' element={<Home />} />     

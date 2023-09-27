@@ -27,7 +27,7 @@ export default function JoinGame() {
         <input type="text" id="gamecode" value={gameCode} onChange={(e) => setGameCode(e.target.value)} placeholder="Enter the game code" />
     </div>
     <div className="enter-button-container">
-    <Link className='enter-btn' to='/gameRoom'> Enter game </ Link>
+        <Link className='enter-btn' to={`/gameRoom/${gameCode}`}> Enter game </ Link>
     </div>
     
     </form>

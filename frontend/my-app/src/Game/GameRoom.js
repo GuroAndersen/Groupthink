@@ -13,9 +13,10 @@ export default function GameRoom() {
         if (gameCode) {
           // Fetch the game room details and set the players list
           axios.get(`http://localhost:8080/api/v1/gameroom/gameRoom/code/${gameCode}`)
-            .then(response => {
-              // Assuming the response contains a list of players
-              setPlayers(response.data.players); // Update the players list
+          .then(response => {
+            if (response.data.players) {
+                setPlayers(response.data.players);
+            } // Update the players list
             })
             .catch(error => {
               console.error("Error fetching game room details:", error);

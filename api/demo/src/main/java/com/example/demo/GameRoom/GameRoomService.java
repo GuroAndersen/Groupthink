@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.Code.CodeGenerator;
 import com.example.demo.Player.Player;
+import com.example.demo.Player.PlayerRepository;
+import com.example.demo.Player.PlayerService;
 
 @Service
 public class GameRoomService {
@@ -17,12 +19,14 @@ public class GameRoomService {
     @Autowired
     private GameRoomRepository gameRoomRepository;
 
+    @Autowired
+    private PlayerService playerService;
+
     // Method to create a new game room with a unique code
     public GameRoom createGameRoom() {
         String uniqueCode = CodeGenerator.generateCode();
         List<Player> playersList = new ArrayList<>();
         GameRoom gameRoom = new GameRoom(uniqueCode, playersList);
-        gameRoom.setCode(CodeGenerator.generateCode());
         gameRoom = gameRoomRepository.save(gameRoom); // After this line, gameRoom's ID is populated
         return gameRoom;
     }
@@ -41,7 +45,7 @@ public class GameRoomService {
                 .orElseThrow(() -> new IllegalStateException("Game room with id " + gameRoomId + "not found!"));
 
         player.setGameRoom(gameRoom);
-
+        playerService.updatePlayer(player);
         gameRoom.getPlayers().add(player);
 
         return gameRoomRepository.save(gameRoom);

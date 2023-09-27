@@ -16,8 +16,8 @@ export default function JoinGame() {
         e.preventDefault();
         // Making API call to join the game
         axios.post('http://localhost:8080/api/v1/gameroom/join', {
-            nickname,
-            gameCode,
+            code: gameCode,
+            playerDetails: {playerName: nickname}
         })
         .then(response => {
             // On successful join, navigate to the game room
@@ -42,7 +42,7 @@ export default function JoinGame() {
                     <input type="text" id="gamecode" value={gameCode} onChange={(e) => setGameCode(e.target.value)} placeholder="Enter the game code" />
                 </div>
                 <div className="enter-button-container">
-                    <Link className='enter-btn' to={`/gameRoom/${gameCode}`}> Enter game </ Link>
+                    <button className='enter-btn' to={`/gameRoom/${gameCode}`} type="submit"> Enter game </ button>
                 </div>
             </form>
         </div>

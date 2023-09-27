@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Player.Player;
+import com.example.demo.Player.PlayerService;
 
 @CrossOrigin(origins = "http://localhost:3000") // React default port
 @RestController
@@ -18,10 +19,12 @@ import com.example.demo.Player.Player;
 public class GameRoomController {
 
     private final GameRoomService gameRoomService;
+    private final PlayerService playerService;
 
     @Autowired
-    public GameRoomController(GameRoomService gameRoomService) {
+    public GameRoomController(GameRoomService gameRoomService, PlayerService playerService) {
         this.gameRoomService = gameRoomService;
+        this.playerService = playerService;
     }
 
     // Endpoint to create a new game room and return its code
@@ -43,9 +46,12 @@ public class GameRoomController {
 
     // Endpoint for players to join game via game code
     @PostMapping("/join")
-    public ResponseEntity<?> joinGameRoom(@RequestBody JoinRequest JoinRequest) {
+    public ResponseEntity<?> joinGameRoom(@RequestBody JoinRequest joinRequest) {
         try {
-            GameRoom gameRoom = gameRoomService.addPlayerToGameRoom(null, null);
+            GameRoom findCode = gameRoomService.findByCode(joinRequest.getCode());
+            Player player = new Player(joinRequest.getPlayerDetails().getPlayerName(), 0, null);
+            playerService.addNewPlayer(player);
+            GameRoom gameRoom = gameRoomService.addPlayerToGameRoom(findCode.getId(), player);
             GameRoomDTO dto = GameRoomMapper.convertToDTO(gameRoom);
             return ResponseEntity.ok(dto);
         } catch (Exception e) {

@@ -7,8 +7,6 @@ export default function PlayerComponent() {
     const [players, setPlayers] = useState([]);
     // Const for adding new players to the game
     const [newPlayer, setNewPlayer] = useState("");
-    // Const for removing players from the game
-    const [removePlayer, setRemovePlayer] = useState("");
 
     // Function for adding the player to the game
     const addNewPlayer = () => {

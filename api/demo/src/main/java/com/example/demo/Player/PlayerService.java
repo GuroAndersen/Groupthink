@@ -46,5 +46,12 @@ public class PlayerService {
         if (name != null && name.length() > 0 && !Objects.equals(player.getName(), name)) {
             player.setName(name);
         }
+
+    }
+
+    @Transactional
+    public void updatePlayer(Player player) {
+        playerRepository.save(player);
+
     }
 }

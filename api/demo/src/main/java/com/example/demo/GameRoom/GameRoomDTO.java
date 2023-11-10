@@ -6,7 +6,7 @@ import com.example.demo.Player.Player;
 
 public class GameRoomDTO {
     private String code;
-    private ArrayList<Player> players;
+    private ArrayList<Player> players = new ArrayList<>();
 
     public GameRoomDTO() {
     }
@@ -23,4 +23,11 @@ public class GameRoomDTO {
         this.code = code;
     }
 
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return this.players;
+    }
 }

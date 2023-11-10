@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import Header from "../Components/Header";
 import RecieveCodeComponent from "../Components/RecieveCodeComponent";
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 export default function GameRoom() {
     const { gameCode } = useParams();
+    const { state } = location;
+    const location = useLocation();
     const [players, setPlayers] = useState([]);
     const isRoomOwner = !gameCode; // If gameCode is not in URL, this user is the room owner
 
@@ -14,6 +16,7 @@ export default function GameRoom() {
           // Fetch the game room details and set the players list
           axios.get(`http://localhost:8080/api/v1/gameroom/gameRoom/code/${gameCode}`)
           .then(response => {
+            console.log("Check responce: ", response.data);
             if (response.data.players) {
                 setPlayers(response.data.players);
             } // Update the players list
@@ -23,6 +26,8 @@ export default function GameRoom() {
             });
         }
       }, [gameCode]);
+
+      console.log("players: ", players);
 
 return(
     <>
@@ -38,7 +43,5 @@ return(
         </div>
     </>
     
-);
-    
-    
+);   
 }

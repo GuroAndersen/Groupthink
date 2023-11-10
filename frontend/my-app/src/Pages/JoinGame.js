@@ -21,11 +21,12 @@ export default function JoinGame() {
         })
         .then(response => {
             // On successful join, navigate to the game room
-            navigate.push(`/gameRoom/${gameCode}`);
+            navigate(`/gameRoom/${gameCode}`, { state: { playerJoined: true } });
         })
         .catch(error => {
             console.error("Error joining game room:", error);
         });
+        console.log("Form submitted with nickname:", nickname, "and game code:", gameCode);
     };
 
     return(
@@ -42,7 +43,7 @@ export default function JoinGame() {
                     <input type="text" id="gamecode" value={gameCode} onChange={(e) => setGameCode(e.target.value)} placeholder="Enter the game code" />
                 </div>
                 <div className="enter-button-container">
-                    <button className='enter-btn' to={`/gameRoom/${gameCode}`} type="submit"> Enter game </ button>
+                    <button className='enter-btn' type="submit"> Enter game </ button>
                 </div>
             </form>
         </div>

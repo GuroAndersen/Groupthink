@@ -1,6 +1,9 @@
 package com.example.demo.GameRoom;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,8 +41,8 @@ public class GameRoomController {
 
     public class GameRoomMapper {
         public static GameRoomDTO convertToDTO(GameRoom gameRoom) {
-            GameRoomDTO dto = new GameRoomDTO();
-            dto.setCode(gameRoom.getCode());
+            GameRoomDTO dto = new GameRoomDTO(gameRoom.getCode());
+            dto.setPlayers(new ArrayList<>(gameRoom.getPlayers()));
             return dto;
         }
     }
@@ -47,14 +50,27 @@ public class GameRoomController {
     // Endpoint for players to join game via game code
     @PostMapping("/join")
     public ResponseEntity<?> joinGameRoom(@RequestBody JoinRequest joinRequest) {
+
+        GameRoom gameRoom = gameRoomService.findByCode(joinRequest.getCode());
+        if (gameRoom == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Game room not found");
+        }
+
+        // Check if a player with the same name already exists in the game room
+        boolean isNameTaken = gameRoom.getPlayers().stream()
+                .anyMatch(p -> p.getName().equalsIgnoreCase(joinRequest.getPlayerDetails().getPlayerName()));
+
+        if ((isNameTaken)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Name taken");
+        }
         try {
-            GameRoom findCode = gameRoomService.findByCode(joinRequest.getCode());
             Player player = new Player(joinRequest.getPlayerDetails().getPlayerName(), 0, null);
             playerService.addNewPlayer(player);
-            GameRoom gameRoom = gameRoomService.addPlayerToGameRoom(findCode.getId(), player);
+            gameRoom = gameRoomService.addPlayerToGameRoom(gameRoom.getId(), player);
             GameRoomDTO dto = GameRoomMapper.convertToDTO(gameRoom);
             return ResponseEntity.ok(dto);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

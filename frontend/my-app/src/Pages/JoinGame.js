@@ -20,8 +20,10 @@ export default function JoinGame() {
             playerDetails: {playerName: nickname}
         })
         .then(response => {
+            console.log("state: ", response.state);
+            console.log("response: ", response);
             // On successful join, navigate to the game room
-            navigate(`/gameRoom/${gameCode}`, { state: { playerJoined: true } });
+            navigate(`/gameRoom/${gameCode}`);
         })
         .catch(error => {
             console.error("Error joining game room:", error);

@@ -2,11 +2,11 @@ package com.example.demo.GameRoom;
 
 import java.util.ArrayList;
 
-import com.example.demo.Player.Player;
+import com.example.demo.Player.PlayersDTO;
 
 public class GameRoomDTO {
     private String code;
-    private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<PlayersDTO> players = new ArrayList<>();
 
     public GameRoomDTO() {
     }
@@ -23,11 +23,11 @@ public class GameRoomDTO {
         this.code = code;
     }
 
-    public void setPlayers(ArrayList<Player> players) {
+    public void setPlayers(ArrayList<PlayersDTO> players) {
         this.players = players;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public ArrayList<PlayersDTO> getPlayers() {
         return this.players;
     }
 }

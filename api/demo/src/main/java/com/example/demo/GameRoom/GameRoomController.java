@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Player.Player;
 import com.example.demo.Player.PlayerService;
+import com.example.demo.Player.PlayersDTO;
 
 @CrossOrigin(origins = "http://localhost:3000") // React default port
 @RestController
@@ -42,7 +43,18 @@ public class GameRoomController {
     public class GameRoomMapper {
         public static GameRoomDTO convertToDTO(GameRoom gameRoom) {
             GameRoomDTO dto = new GameRoomDTO(gameRoom.getCode());
-            dto.setPlayers(new ArrayList<>(gameRoom.getPlayers()));
+            ArrayList<PlayersDTO> playersDTOs = new ArrayList<>();
+            for (Player player : gameRoom.getPlayers()) {
+                playersDTOs.add(PlayerMapper.convertToDTO(player));
+            }
+            dto.setPlayers(playersDTOs);
+            return dto;
+        }
+    }
+
+    public class PlayerMapper {
+        public static PlayersDTO convertToDTO(Player player) {
+            PlayersDTO dto = new PlayersDTO(player.getId(), player.getName(), player.getScore(), player.getAnswer());
             return dto;
         }
     }
@@ -81,10 +93,8 @@ public class GameRoomController {
         if (gameRoom == null) {
             return ResponseEntity.notFound().build();
         }
-        GameRoomDTO dto = new GameRoomDTO();
-        dto.setCode(gameRoom.getCode());
         // Add any other necessary details to the DTO
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(GameRoomMapper.convertToDTO(gameRoom));
     }
 
     @GetMapping("/gameRoom/id/{id}")
@@ -93,9 +103,7 @@ public class GameRoomController {
         if (gameRoom == null) {
             return ResponseEntity.notFound().build();
         }
-        GameRoomDTO dto = new GameRoomDTO();
-        dto.setCode(gameRoom.getCode());
         // Add any other necessary details to the DTO
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(GameRoomMapper.convertToDTO(gameRoom));
     }
 }

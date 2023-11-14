@@ -1,5 +1,6 @@
 package com.example.demo.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.GameRoom.GameRoomController.PlayerMapper;
+
 @CrossOrigin(origins = "http://localhost:3000") // React default port
 @RestController
 @RequestMapping(path = "api/v1/player")
@@ -27,10 +30,14 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Player>> getPlayers() {
+    @GetMapping("/getPlayers")
+    public ResponseEntity<List<PlayersDTO>> getPlayers() {
         List<Player> players = playerService.getPlayers();
-        return ResponseEntity.ok(players);
+        List<PlayersDTO> playersDTOs = new ArrayList<>();
+        for (Player player : players) {
+            playersDTOs.add(PlayerMapper.convertToDTO(player));
+        }
+        return ResponseEntity.ok(playersDTOs);
     }
 
     @PostMapping

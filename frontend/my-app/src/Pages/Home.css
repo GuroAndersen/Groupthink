@@ -23,6 +23,8 @@
   width: 300px;
   height: 100px;
   text-align: center;
+  font-size: x-large;
+  font-weight: 480;
 }
 
 .btn:hover {
